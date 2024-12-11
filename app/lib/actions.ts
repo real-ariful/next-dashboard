@@ -4,8 +4,30 @@ import { z } from 'zod';
 import { db } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
 const client = await db.connect();
+
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  try {
+    await signIn('credentials', formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
+      }
+    }
+    throw error;
+  }
+}
+
 
 const FormSchema = z.object({
   id: z.string(),
@@ -84,10 +106,6 @@ export async function updateInvoice(
   prevState: State,
   formData: FormData,
 ) {
-  console.log('updateInvoice') 
-  console.log(formData)  
-  const [first] = formData;
-  console.log(first)  
   // Validate form fields using Zod
     const validatedFields = UpdateInvoice.safeParse({
       customerId: formData.get('customerId'),
