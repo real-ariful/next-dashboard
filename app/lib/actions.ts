@@ -9,6 +9,76 @@ import { AuthError } from 'next-auth';
 
 const client = await db.connect();
 
+// createUser
+export type UserState = {
+  errors?: {
+    name?: string[];
+    email?: string[];
+    password?: string[];
+  };
+  message?: string | null;
+};
+
+const UserFormSchema = z.object({
+  id: z.string(),
+  name: z.string({
+    invalid_type_error: 'Please provide first name.',
+  }),
+  email: z.string({
+    invalid_type_error: 'Please provide email address.',
+  }),
+  password: z.string({
+    invalid_type_error: 'Please provide password.',
+  }),
+  active: z.string(),
+  createDate: z.string(),
+});
+
+const CreateUser = UserFormSchema.omit({ id: true, active: true, createDate: true });
+
+export async function createUser(formData: FormData) {
+// export async function createUser(prevState: UserState, formData: FormData) {
+  console.log(formData)  
+  const validatedFields = CreateUser.safeParse({
+      name: formData.get('name'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+    });
+  
+    // If form validation fails, return errors early. Otherwise, continue.
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create User.',
+      };
+    }
+    
+    // Prepare data for insertion into the database
+    const {name, email, password} = CreateUser.parse({
+      name: formData.get('name'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+    });
+
+    
+    // Insert data into the database
+    try {
+      await client.sql`
+        INSERT INTO users (name, email, password)
+        VALUES (${name}, ${email}, ${password})
+      `;
+    } catch (error) {
+      // If a database error occurs, return a more specific error.
+      return {
+        message: 'Database Error: Failed to Create User.',
+      };
+    }
+
+    // Revalidate the cache for the invoices page and redirect the user.
+    revalidatePath('/dashboard/invoices');
+    redirect('/dashboard/invoices');
+}
+
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
@@ -28,6 +98,7 @@ export async function authenticate(
   }
 }
 
+// 
 
 const FormSchema = z.object({
   id: z.string(),
@@ -97,7 +168,6 @@ export async function createInvoice(prevState: State, formData: FormData) {
     revalidatePath('/dashboard/invoices');
     redirect('/dashboard/invoices');
 }
-
 
 const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 
