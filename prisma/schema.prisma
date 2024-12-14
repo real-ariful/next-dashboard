@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  name     String?
+  password String
+  active   Boolean  @default(true)
+}
+
+model Customer {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  imageUrl     String    @map("image_url")
+  invoices     Invoice[]
+  totalInvoices Int      @default(0)
+  totalPending Int      @default(0)
+  totalPaid    Int      @default(0)
+}
+
+model Invoice {
+  id          Int      @id @default(autoincrement())
+  customerId  Int      @map("customer_id")
+  customer    Customer @relation(fields: [customerId], references: [id])
+  amount      Float
+  date        DateTime @default(now())
+  status      String
+}
+
+model Revenue {
+  id      Int    @id @default(autoincrement())
+  month   String @unique
+  revenue Int
+}
+
+// Note: The following tables appear to be view-like structures
+// Consider using Prisma Views or API response types instead
+
+model LatestInvoice {
+  id       Int    @id @default(autoincrement())
+  name     String
+  imageUrl String @map("image_url")
+  email    String @unique
+  amount   Float
+}
+
+model CustomerField {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+model InvoiceForm {
+  id         Int    @id @default(autoincrement())
+  customerId Int    @map("customer_id")
+  amount     Int
+  status     String
+}
