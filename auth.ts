@@ -3,7 +3,9 @@ import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
 import { db } from '@vercel/postgres';
-const client = await db.connect();
+// const client = await db.connect();
+import { createClient } from '@vercel/postgres';
+const client = createClient();
 
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';

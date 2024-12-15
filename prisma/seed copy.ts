@@ -9,9 +9,9 @@ async function main() {
 	// Create a new user in the database using Prisma Client
 	const user1 = await prisma.user.create({
 		data: {
-			email: 'mark@test.com',
-			name: 'Mark',
-			password: 'mark', // Note: In a real application, ensure passwords are hashed!
+			email: 'ariful@example.com',
+			name: 'Ariful',
+			password: 'ariful', // Note: In a real application, ensure passwords are hashed!
 		},
 	});
 

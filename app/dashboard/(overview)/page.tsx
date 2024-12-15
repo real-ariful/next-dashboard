@@ -6,7 +6,7 @@ import { lusitana } from '@/app/ui/fonts';
 import { Suspense } from 'react';
 import { RevenueChartSkeleton, LatestInvoicesSkeleton, CardsSkeleton} from '@/app/ui/skeletons';
 import { Metadata } from 'next';
-// import prisma from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 
 export const metadata: Metadata = {
   title: 'Dashboard',

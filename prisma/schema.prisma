@@ -33,7 +33,7 @@ model Invoice {
   id          Int      @id @default(autoincrement())
   customerId  Int      @map("customer_id")
   customer    Customer @relation(fields: [customerId], references: [id])
-  amount      Float
+  amount      Int
   date        DateTime @default(now())
   status      String
 }
