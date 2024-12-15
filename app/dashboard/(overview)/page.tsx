@@ -6,7 +6,7 @@ import { lusitana } from '@/app/ui/fonts';
 import { Suspense } from 'react';
 import { RevenueChartSkeleton, LatestInvoicesSkeleton, CardsSkeleton} from '@/app/ui/skeletons';
 import { Metadata } from 'next';
-import prisma from '@/lib/prisma';
+// import prisma from '@/lib/prisma';
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -15,17 +15,24 @@ export const metadata: Metadata = {
 
 
 export default async function Page() {
-  const data = await prisma.user.findMany();
+  // const data = await prisma.user.findMany();
+  // return (
+  //   <main>
+  //     <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
+  //       Dashboard
+  //     </h1>
+  //     <div>
+  //       {data.map((user) => (
+  //         <div key={user.id}>{user.name}</div>
+  //       ))}
+  //     </div>
+  //   </main>
+  // );
   return (
     <main>
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Dashboard
       </h1>
-      <div>
-        {data.map((user) => (
-          <div key={user.id}>{user.name}</div>
-        ))}
-      </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Suspense fallback={<CardsSkeleton />}>
           <CardWrapper />
