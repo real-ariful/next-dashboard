@@ -6,7 +6,6 @@ import { lusitana } from '@/app/ui/fonts';
 import { CustomersSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
 import { fetchCustomers } from '@/app/lib/data';
-
 import { Metadata } from 'next';
  
 export const metadata: Metadata = {
@@ -19,11 +18,17 @@ export default async function Page(props: {
     page?: string;
   }>;
 }) {
+  console.log('Customers Page')
   const searchParams = await props.searchParams;
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchCustomers(query);
 
+  console.log('searchParams ===>>>', searchParams)
+  console.log('query ===>>>', query)
+  console.log('currentPage ===>>>', currentPage)
+  console.log('totalPages ===>>>', totalPages)
+  return (<p>Customers Page</p>)
   return (
       <div className="w-full">
         <div className="flex w-full items-center justify-between">

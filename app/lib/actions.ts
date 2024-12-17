@@ -230,6 +230,8 @@ export async function createCustomer(prevState: CustomerState, formData: FormDat
     imageUrl: formData.get('image_url'),
   });
 
+  console.log(validatedFields);
+
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
