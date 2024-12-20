@@ -24,10 +24,6 @@ export default async function Page(props: {
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchCustomers(query);
 
-  console.log('searchParams ===>>>', searchParams)
-  console.log('query ===>>>', query)
-  console.log('currentPage ===>>>', currentPage)
-  console.log('totalPages ===>>>', totalPages)
   return (<p>Customers Page</p>)
   return (
       <div className="w-full">

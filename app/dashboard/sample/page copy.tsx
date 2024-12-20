@@ -1,21 +1,8 @@
 'use client'
 
 import { lusitana } from '@/app/ui/fonts';
-import { useState, useEffect } from 'react';
-// import * as pdfjsLib from 'pdfjs-dist';
-import { getDocument, GlobalWorkerOptions, PDFDocumentProxy, TextContent } from 'pdfjs-dist';
-
-// Initialize PDF.js
-const initPdfJs = async () => {
-  const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
-  GlobalWorkerOptions.workerSrc = pdfjsWorker.default;
-};
-
-type PDFContent = {
-  text: string;
-  pageNum: number;
-}
-
+import { Metadata } from 'next';
+import { useState } from 'react';
 
 // export const metadata: Metadata = {
 //   title: 'PDF Viewer with Chat',
@@ -27,6 +14,13 @@ type Message = {
   text: string;
   sender: string;
   timestamp: Date;
+}
+
+type PageProps = {
+  searchParams?: {
+    query?: string;
+    page?: string;
+  }
 }
 
 // Chat Component
@@ -98,41 +92,12 @@ const ChatBox = () => {
   );
 };
 
-// PDF Viewer Component with content extraction
+// PDF Viewer Component
 const PDFViewer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [pdfUrl, setPdfUrl] = useState<string>('');
-  const [pdfContent, setPdfContent] = useState<PDFContent[]>([]);
-
-  useEffect(() => {
-    initPdfJs().catch(console.error);
-  }, []);
-
-  const extractPDFContent = async (file: File) => {
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf: PDFDocumentProxy = await getDocument(arrayBuffer).promise;
-      const maxPages = pdf.numPages;
-      const content: PDFContent[] = [];
-
-      for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
-        const page = await pdf.getPage(pageNum);
-        const textContent: TextContent = await page.getTextContent();
-        const textItems = textContent.items.map((item: any) => item.str);
-        content.push({
-          text: textItems.join(' '),
-          pageNum: pageNum
-        });
-      }
-
-      return content;
-    } catch (error) {
-      console.error('Error extracting PDF content:', error);
-      throw error;
-    }
-};
 
   const handleUpload = async (file: File) => {
     try {
@@ -140,19 +105,23 @@ const PDFViewer = () => {
       setError('');
       setSuccess('');
 
-      // Create URL for PDF viewer
       const fileUrl = URL.createObjectURL(file);
       setPdfUrl(fileUrl);
+      setSuccess('PDF uploaded successfully!');
 
-      // Extract PDF content
-      const content = await extractPDFContent(file);
-      console.log('content ==>>>', content)
-      setPdfContent(content);
-      
-      setSuccess('PDF uploaded and content extracted successfully!');
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // const response = await fetch('/api/upload', {
+      //   method: 'POST',
+      //   body: formData,
+      // });
+
+      // const data = await response.json();
+      // if (!response.ok) throw new Error(data.message || 'Upload failed');
 
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to process PDF');
+      setError(err instanceof Error ? err.message : 'Failed to upload PDF');
     } finally {
       setIsLoading(false);
     }
@@ -213,24 +182,24 @@ const PDFViewer = () => {
         </div>
       )}
 
-    
-      <div className="grid grid-cols-2 gap-4">
-        <div className="border rounded-lg overflow-hidden">
-          {pdfUrl && (
-            <iframe
-              src={`${pdfUrl}#toolbar=0`}
-              className="w-full h-[600px]"
-              title="PDF Viewer"
-            />)}
-          </div>
-        <ChatBox />
-      </div>
+      
+        <div className="grid grid-cols-2 gap-4">
+          <div className="border rounded-lg overflow-hidden">
+            {pdfUrl && (
+              <iframe
+                src={`${pdfUrl}#toolbar=0`}
+                className="w-full h-[600px]"
+                title="PDF Viewer"
+              />)}
+            </div>
+          <ChatBox />
+        </div>
       
     </div>
   );
 };
 
-export default async function Page() {
+export default async function Page({ searchParams }: PageProps) {
   return (
     <main className="p-6">
       <h1 className={`${lusitana.className} text-2xl font-bold mb-6`}>
