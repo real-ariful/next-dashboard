@@ -7,9 +7,8 @@ import {
   CurrencyDollarIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
-import Link from 'next/link';
-import { Button } from '@/app/ui/button';
-import { UpdateCustomer } from './buttons';
+// import Link from 'next/link';
+// import { Button } from '@/app/ui/button';
 import { updateCustomer, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 

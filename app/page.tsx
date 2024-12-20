@@ -18,11 +18,11 @@ export default function Page() {
 <p
       className={`${lusitana.className} text-xl text-gray-800 md:text-3xl md:leading-normal`}
     >
-            <strong>Welcome to Jackfruit.</strong> This is the example for the{' '}
-            <a href="https://nextjs.org/learn/" className="text-blue-500">
-              Next.js Learn Course
-            </a>
-            , brought to you by Jackfruit.
+            <strong>Welcome to Jackfruit AI.</strong> This is the best interactive pdf solution in Bangladesh
+            {/* for the{' '} */}
+            , brought to you by <a href="https://jackfruiterp.com" className="text-blue-500">
+            Jackfruit ERP
+            </a>.
           </p>
           <Link
             href="/login"

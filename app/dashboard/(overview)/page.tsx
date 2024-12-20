@@ -15,19 +15,19 @@ export const metadata: Metadata = {
 
 
 export default async function Page() {
-  const data = await prisma.user.findMany();
-  return (
-    <main>
-      <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-        Dashboard
-      </h1>
-      <div>
-        {data.map((user) => (
-          <div key={user.id}>{user.name}</div>
-        ))}
-      </div>
-    </main>
-  );
+  // const data = await prisma.user.findMany();
+  // return (
+  //   <main>
+  //     <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
+  //       Dashboard
+  //     </h1>
+  //     <div>
+  //       {data.map((user) => (
+  //         <div key={user.id}>{user.name}</div>
+  //       ))}
+  //     </div>
+  //   </main>
+  // );
   return (
     <main>
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>

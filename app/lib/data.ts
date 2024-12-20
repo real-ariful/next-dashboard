@@ -9,6 +9,86 @@ import { formatCurrency } from './utils';
 //   Revenue,
 // } from './definitions';
 
+//Users
+export async function fetchUsers() {
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        imageUrl: true,
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    });
+
+    return users;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch all users.');
+  }
+}
+
+export async function fetchFilteredUsers(query: string) {
+  try {
+    const users = await prisma.user.findMany({
+      where: {
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { email: { contains: query, mode: 'insensitive' } },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        imageUrl: true,
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    });
+
+    return users.map((user) => {
+      return {
+        ...user,
+      };
+    });
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch user table.');
+  }
+}
+
+export async function fetchUserById(id: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        imageUrl: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error('Customer not found');
+    }
+
+    return user;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch user.');
+  }
+}
+
+// Invoices
+
 export async function fetchRevenue() {
   try {
     console.log('Fetching revenue data...');
@@ -203,6 +283,8 @@ export async function fetchInvoiceById(id: string) {
   }
 }
 
+// Customers
+
 export async function fetchCustomers() {
   try {
     const customers = await prisma.customer.findMany({
@@ -296,3 +378,4 @@ export async function fetchCustomerById(id: string) {
     throw new Error('Failed to fetch customer.');
   }
 }
+

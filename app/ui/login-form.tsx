@@ -16,6 +16,10 @@ export default function LoginForm() {
     authenticate,
     undefined,
   );
+
+  console.log('errorMessage', errorMessage)
+  console.log('formAction', formAction)
+  console.log('isPending', isPending)
   return (
     <form action={formAction} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -67,7 +71,6 @@ export default function LoginForm() {
           Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
         <div className="flex h-8 items-end space-x-1">
-          {/* Add form errors here */}
           {errorMessage && (
             <>
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
