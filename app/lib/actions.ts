@@ -35,7 +35,7 @@ const UserFormSchema = z.object({
 const CreateUser = UserFormSchema.omit({ id: true, active: true, createDate: true });
 
 export async function createUser(formData: FormData) {
-  console.log(formData);
+  console.log('createUser', formData);
   const validatedFields = CreateUser.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),

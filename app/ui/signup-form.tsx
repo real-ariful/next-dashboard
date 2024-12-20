@@ -10,19 +10,27 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
-import { useActionState } from 'react';
+// import { useActionState } from 'react';
 import { createUser } from '@/app/lib/actions';
 
+
 export default function SignupForm() {
+  console.log('SignupForm')
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
+    confirmPassword: ''
   });
+
+  console.log(formData)
+  console.log(setFormData)
+
 
   const [isPending, setIsPending] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
+  console.log(isPending)
+  console.log(errorMessage)
   return (
     <form action={createUser} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -34,36 +42,17 @@ export default function SignupForm() {
             <div className="flex-1">
               <label
                 className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-                htmlFor="firstName"
+                htmlFor="name"
               >
                 First Name
               </label>
               <div className="relative">
                 <input
                   className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                  id="firstName"
+                  id="name"
                   type="text"
-                  name="firstName"
-                  placeholder="Enter your first name"
-                  required
-                />
-                <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-              </div>
-            </div>
-            <div className="flex-1">
-              <label
-                className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-                htmlFor="lastName"
-              >
-                Last Name
-              </label>
-              <div className="relative">
-                <input
-                  className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                  id="lastName"
-                  type="text"
-                  name="lastName"
-                  placeholder="Enter your last name"
+                  name="name"
+                  placeholder="Enter your name"
                   required
                 />
                 <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
