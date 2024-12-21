@@ -26,10 +26,6 @@ export default function SignupForm() {
   const [isPending, setIsPending] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  console.log('formData', formData)
-  console.log('setFormData', setFormData)
-  console.log('isPending', isPending)
-  console.log('errorMessage', errorMessage)
   return (
     <form action={createUser} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">

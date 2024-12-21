@@ -17,7 +17,7 @@ export async function fetchUsers() {
         id: true,
         name: true,
         email: true,
-        imageUrl: true,
+        // imageUrl: true,
       },
       orderBy: {
         name: 'asc',
@@ -44,7 +44,7 @@ export async function fetchFilteredUsers(query: string) {
         id: true,
         name: true,
         email: true,
-        imageUrl: true,
+        // imageUrl: true,
       },
       orderBy: {
         name: 'asc',
@@ -72,7 +72,7 @@ export async function fetchUserById(id: string) {
         id: true,
         name: true,
         email: true,
-        imageUrl: true,
+        // imageUrl: true,
       },
     });
 
@@ -84,6 +84,33 @@ export async function fetchUserById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch user.');
+  }
+}
+
+export async function fetchUsersPages(query: string) {
+  try {
+    // const count = await prisma.user.count({
+    //   where: {
+    //     OR: [
+    //       {
+    //         user: {
+    //           OR: [
+    //             { name: { contains: query, mode: 'insensitive' } },
+    //             { email: { contains: query, mode: 'insensitive' } },
+    //           ],
+    //         },
+    //       }
+    //       ,
+    //       { email: { contains: query, mode: 'insensitive' } },
+    //     ],
+    //   },
+    // });
+    const count = await prisma.user.count({
+     });
+    return Math.ceil(count / ITEMS_PER_PAGE);
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of invoices.');
   }
 }
 

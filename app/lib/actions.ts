@@ -112,8 +112,6 @@ const UserFormSchema = z.object({
 const CreateUser = UserFormSchema.omit({ id: true, active: true, createDate: true });
 
 export async function createUser(formData: FormData) {
-  console.log('createUser', formData);
-
   const validatedFields = CreateUser.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
@@ -153,6 +151,55 @@ export async function createUser(formData: FormData) {
 
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
+}
+
+export async function updateUser(
+  id: string,
+  prevState: UserState,
+  formData: FormData,
+) {
+  const validatedFields = CreateUser.safeParse({
+    name: formData.get('name'),
+    email: formData.get('email'),
+    imageUrl: formData.get('image_url'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Update User.',
+    };
+  }
+
+  const { name, email, imageUrl } = validatedFields.data;
+
+  try {
+    await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: {
+        name,
+        email,
+        imageUrl,
+      },
+    });
+  } catch (error) {
+    return { message: 'Database Error: Failed to Update User.' };
+  }
+
+  revalidatePath('/dashboard/users');
+  redirect('/dashboard/users');
+}
+
+export async function deleteUser(id: string) {
+  try {
+    await prisma.user.delete({
+      where: { id: parseInt(id) },
+    });
+    revalidatePath('/dashboard/users');
+    return { message: 'Deleted User.' };
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete User.' };
+  }
 }
 
 

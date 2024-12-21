@@ -8,6 +8,7 @@ export type User = {
   email: string;
   password: string;
   active: boolean;
+  image_url: string;
 };
 
 export type Customer = {

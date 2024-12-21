@@ -16,6 +16,7 @@ model User {
   name     String?
   password String
   active   Boolean  @default(true)
+  imageUrl     String    @map("image_url")
 }
 
 model Customer {
